@@ -11,6 +11,7 @@ public class Campus {
     private static ArrayList<Professor> professors = new ArrayList<>();
 
     private static ArrayList<GeneralUser> users = new ArrayList<>();
+    private static ArrayList<LibraryUser> libraryUsers = new ArrayList<>();
 
     public static ArrayList<Library> getLibraries() {
         return libraries;
@@ -57,5 +58,13 @@ public class Campus {
 
     public static void setUsers(ArrayList<GeneralUser> users) {
         Campus.users = users;
+    }
+
+    public static ArrayList<LibraryUser> getLibraryUsers() {
+        return libraryUsers;
+    }
+
+    public static void setLibraryUsers(ArrayList<LibraryUser> libraryUsers) {
+        Campus.libraryUsers = libraryUsers;
     }
 }

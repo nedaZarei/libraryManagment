@@ -1,14 +1,12 @@
-abstract public class BorrowedResource {
+abstract public class BorrowedResource{
     private String costumer_id;
-    private String name;
     private String lib_id;
     private String item_id;
     private String date_of_borrowing;
     private String time_of_borrowing;
 
-    public BorrowedResource(String costumer_id, String name, String lib_id, String item_id, String date_of_borrowing, String time_of_borrowing) {
+    public BorrowedResource(String costumer_id, String lib_id, String item_id, String date_of_borrowing, String time_of_borrowing) {
         this.costumer_id = costumer_id;
-        this.name = name;
         this.lib_id = lib_id;
         this.item_id = item_id;
         this.date_of_borrowing = date_of_borrowing;
@@ -21,14 +19,6 @@ abstract public class BorrowedResource {
 
     public void setCostumer_id(String costumer_id) {
         this.costumer_id = costumer_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getLib_id() {

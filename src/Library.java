@@ -7,15 +7,15 @@ public class Library {
     private final int numberOfDesks;
     private final String address;
     private ArrayList<Manager> managers;
+    private ArrayList<Resource> resources;
     private  ArrayList<Book> books;
     private  ArrayList<Thesis> theses;
-    private   ArrayList<BorrowedBook> borrowedBooks;
-    private   ArrayList<BorrowedThesis> borrowedTheses;
-    private   ArrayList<ReturnedBook> returnedBooks;
-    private   ArrayList<ReturnedThesis> returnedTheses;
+    private ArrayList<BorrowedResource> borrowedResources;
+    private ArrayList<ReturnedResource> returnedResources;
     private  ArrayList<GanjinehBook> ganjinehBooks;
     private ArrayList<SellingBook> sellingBooks;
-
+    private ArrayList<SellingBook> boughtBooks;
+    private ArrayList<GanjinehBook> readGanjinehBooks;
 
     public Library(String libId, String name, int startYear, int numberOfDesks, String address) {
         this.libId = libId;
@@ -24,14 +24,15 @@ public class Library {
         this.numberOfDesks = numberOfDesks;
         this.address = address;
         this.managers = new ArrayList<>();
+        this.resources = new ArrayList<>();
         this.books = new ArrayList<>();
         this.theses = new ArrayList<>();
-        this.borrowedBooks = new ArrayList<>();
-        this.borrowedTheses = new ArrayList<>();
-        this.returnedBooks = new ArrayList<>();
-        this.returnedTheses = new ArrayList<>();
+        this.borrowedResources = new ArrayList<>();
+        this.returnedResources = new ArrayList<>();
         this.ganjinehBooks = new ArrayList<>();
         this.sellingBooks = new ArrayList<>();
+        this.boughtBooks = new ArrayList<>();
+        this.readGanjinehBooks = new ArrayList<>();
     }
 
     public String getLibId() {
@@ -58,6 +59,14 @@ public class Library {
         return managers;
     }
 
+    public ArrayList<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(ArrayList<Resource> resources) {
+        this.resources = resources;
+    }
+
     public void setManagers(ArrayList<Manager> managers) {
         this.managers = managers;
     }
@@ -78,38 +87,6 @@ public class Library {
         this.theses = theses;
     }
 
-    public ArrayList<BorrowedBook> getBorrowedBooks() {
-        return borrowedBooks;
-    }
-
-    public void setBorrowedBooks(ArrayList<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
-    }
-
-    public ArrayList<BorrowedThesis> getBorrowedTheses() {
-        return borrowedTheses;
-    }
-
-    public void setBorrowedTheses(ArrayList<BorrowedThesis> borrowedTheses) {
-        this.borrowedTheses = borrowedTheses;
-    }
-
-    public ArrayList<ReturnedBook> getReturnedBooks() {
-        return returnedBooks;
-    }
-
-    public void setReturnedBooks(ArrayList<ReturnedBook> returnedBooks) {
-        this.returnedBooks = returnedBooks;
-    }
-
-    public ArrayList<ReturnedThesis> getReturnedTheses() {
-        return returnedTheses;
-    }
-
-    public void setReturnedTheses(ArrayList<ReturnedThesis> returnedTheses) {
-        this.returnedTheses = returnedTheses;
-    }
-
     public ArrayList<GanjinehBook> getGanjinehBooks() {
         return ganjinehBooks;
     }
@@ -124,5 +101,37 @@ public class Library {
 
     public void setSellingBooks(ArrayList<SellingBook> sellingBooks) {
         this.sellingBooks = sellingBooks;
+    }
+
+    public ArrayList<BorrowedResource> getBorrowedResources() {
+        return borrowedResources;
+    }
+
+    public void setBorrowedResources(ArrayList<BorrowedResource> borrowedResources) {
+        this.borrowedResources = borrowedResources;
+    }
+
+    public ArrayList<ReturnedResource> getReturnedResources() {
+        return returnedResources;
+    }
+
+    public void setReturnedResources(ArrayList<ReturnedResource> returnedResources) {
+        this.returnedResources = returnedResources;
+    }
+
+    public ArrayList<SellingBook> getBoughtBooks() {
+        return boughtBooks;
+    }
+
+    public void setBoughtBooks(ArrayList<SellingBook> boughtBooks) {
+        this.boughtBooks = boughtBooks;
+    }
+
+    public ArrayList<GanjinehBook> getReadGanjinehBooks() {
+        return readGanjinehBooks;
+    }
+
+    public void setReadGanjinehBooks(ArrayList<GanjinehBook> readGanjinehBooks) {
+        this.readGanjinehBooks = readGanjinehBooks;
     }
 }

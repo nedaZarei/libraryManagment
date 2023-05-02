@@ -16,10 +16,10 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                 }
                 Campus.getLibraries().get(i).getBooks().add(book);
+                Campus.getLibraries().get(i).getResources().add(book);
                 System.out.println("success");
                 break;
             }
-
         }
     }
     @Override
@@ -34,6 +34,7 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                 }
                 Campus.getLibraries().get(i).getTheses().add(thesis);
+                Campus.getLibraries().get(i).getResources().add(thesis);
                 System.out.println("success");
                 break;
             }
@@ -51,6 +52,7 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                 }
                 Campus.getLibraries().get(i).getGanjinehBooks().add(ganjinehBook);
+                Campus.getLibraries().get(i).getResources().add(ganjinehBook);
                 System.out.println("success");
                 break;
             }
@@ -68,6 +70,7 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                 }
                 Campus.getLibraries().get(i).getSellingBooks().add(sellingBook);
+                Campus.getLibraries().get(i).getResources().add(sellingBook);
                 System.out.println("success");
                 break;
             }
@@ -78,19 +81,18 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
         for (int i = 0; i < Campus.getLibraries().size(); i++) {
             if (Campus.getLibraries().get(i).getLibId().equals(lib_id)) {
 
-                for (int k = 0; k < Campus.getLibraries().get(i).getBorrowedBooks().size(); k++) {
-                    if (Campus.getLibraries().get(i).getBorrowedBooks().get(k).getItem_id().equals(resource_id)) {
+                for (int k = 0; k < Campus.getLibraries().get(i).getBorrowedResources().size(); k++) {
+                    if (Campus.getLibraries().get(i).getBorrowedResources().get(k).getItem_id().equals(resource_id)) {
                         System.out.println("not-allowed");
                         return;
                     }
                 }
-                for (int k = 0; k < Campus.getLibraries().get(i).getBorrowedTheses().size(); k++) {
-                    if (Campus.getLibraries().get(i).getBorrowedTheses().get(k).getItem_id().equals(resource_id)) {
-                        System.out.println("not-allowed");
-                        return;
+                for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
+                    if(Campus.getLibraries().get(i).getResources().get(k).equals(resource_id)){
+                        Campus.getLibraries().get(i).getResources().remove(k);
+                        break; //not returning,so it would remove from the specific list too
                     }
                 }
-
                 for(int k=0; k < Campus.getLibraries().get(i).getBooks().size(); k++){
                     if(Campus.getLibraries().get(i).getBooks().get(k).getId().equals(resource_id)){
                        Campus.getLibraries().get(i).getBooks().remove(k);

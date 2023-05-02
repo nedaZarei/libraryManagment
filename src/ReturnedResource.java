@@ -1,14 +1,14 @@
 abstract public class ReturnedResource {
     private String lib_id;
-    private String book_id;
+    private String id;
     private String costumer_id;
     private String date;
     private String time;
     private int penalty;
 
-    public ReturnedResource(String lib_id, String book_id, String costumer_id, String date, String time, int penalty) {
+    public ReturnedResource(String lib_id, String id, String costumer_id, String date, String time, int penalty) {
         this.lib_id = lib_id;
-        this.book_id = book_id;
+        this.id = id;
         this.costumer_id = costumer_id;
         this.date = date;
         this.time = time;
@@ -23,12 +23,12 @@ abstract public class ReturnedResource {
         this.lib_id = lib_id;
     }
 
-    public String getBook_id() {
-        return book_id;
+    public String getId() {
+        return id;
     }
 
-    public void setBook_id(String book_id) {
-        this.book_id = book_id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCostumer_id() {

@@ -29,31 +29,38 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
         Campus.getCategories().add(category);
         System.out.println("success");
     }
-    private static void adding_user(User user) {
+    private static boolean adding_user(User user) {
         for (int i = 0; i < Campus.getUsers().size(); i++) {
             if (Campus.getUsers().get(i).getId().equals(user.getId())) {
                 System.out.println("duplicate-id");
-                return;
+                return false;
             }
         }
         Campus.getUsers().add(user);
         System.out.println("success");
+        return true;
     }
 
     @Override
     public void addStudent(Student student) {
-        adding_user(student);
+       if(adding_user(student)){
+           Campus.getLibraryUsers().add(student);
+       }
+
     }
     @Override
     public void addStaff(Staff staff) {
-        adding_user(staff);
+        if(adding_user(staff)){
+            Campus.getLibraryUsers().add(staff);
+        }
     }
 
     @Override
     public void addProfessor(Professor professor) {
-       adding_user(professor);
+       if(adding_user(professor)){
+           Campus.getLibraryUsers().add(professor);
+       }
     }
-
     @Override
     public void addManager(Manager manager, String lib_id) {
         for (int i = 0; i < Campus.getUsers().size(); i++) {
@@ -77,29 +84,17 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
         boolean user_has_penalty = false;
         for(int i=0; i<Campus.getLibraries().size(); i++){
 
-            for(int k=0; k<Campus.getLibraries().get(i).getBorrowedBooks().size(); k++){
+            for(int k=0; k<Campus.getLibraries().get(i).getBorrowedResources().size(); k++){
 
-                if(Campus.getLibraries().get(i).getBorrowedBooks().get(k).getCostumer_id().equals(user_id)){
+                if(Campus.getLibraries().get(i).getReturnedResources().get(k).getCostumer_id().equals(user_id)){
                     user_is_borrowing = true;
                     break;
                 }
             }
-            for(int k=0; k<Campus.getLibraries().get(i).getBorrowedTheses().size(); k++){
-                if(Campus.getLibraries().get(i).getBorrowedTheses().get(k).getCostumer_id().equals(user_id)){
-                    user_is_borrowing = true;
-                    break;
-                }
-            }
-            for(int k=0; k<Campus.getLibraries().get(i).getReturnedBooks().size(); k++){
-                if(Campus.getLibraries().get(i).getReturnedBooks().get(k).getCostumer_id().equals(user_id)
-                   &&(Campus.getLibraries().get(i).getReturnedBooks().get(k).getPenalty() != 0) ){
-                    user_has_penalty = true;
-                    break;
-                }
-            }
-            for(int k=0; k<Campus.getLibraries().get(i).getReturnedTheses().size(); k++){
-                if(Campus.getLibraries().get(i).getReturnedTheses().get(k).getCostumer_id().equals(user_id)
-                        &&(Campus.getLibraries().get(i).getReturnedTheses().get(k).getPenalty() != 0) ){
+
+            for(int k=0; k<Campus.getLibraries().get(i).getReturnedResources().size(); k++){
+                if(Campus.getLibraries().get(i).getReturnedResources().get(k).getCostumer_id().equals(user_id)
+                   &&(Campus.getLibraries().get(i).getReturnedResources().get(k).getPenalty() != 0) ){
                     user_has_penalty = true;
                     break;
                 }
@@ -112,6 +107,18 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
             for(int i=0; i<Campus.getUsers().size(); i++){
                 if(Campus.getUsers().get(i).getId().equals(user_id)){
                     Campus.getUsers().remove(i);
+
+                    if(Campus.getUsers().get(i) instanceof Student
+                       || Campus.getUsers().get(i) instanceof Staff
+                         || Campus.getUsers().get(i) instanceof Professor){
+
+                        for(int k=0; k<Campus.getLibraryUsers().size(); k++){
+                            if(Campus.getLibraryUsers().get(k).getId().equals(user_id)){
+                                Campus.getLibraryUsers().remove(k);
+                                break;
+                            }
+                        }
+                    }
                     break;
                 }
             }
