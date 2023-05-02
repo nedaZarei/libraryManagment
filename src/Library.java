@@ -13,6 +13,8 @@ public class Library {
     private   ArrayList<BorrowedThesis> borrowedTheses;
     private   ArrayList<ReturnedBook> returnedBooks;
     private   ArrayList<ReturnedThesis> returnedTheses;
+    private  ArrayList<GanjinehBook> ganjinehBooks;
+    private ArrayList<SellingBook> sellingBooks;
 
 
     public Library(String libId, String name, int startYear, int numberOfDesks, String address) {
@@ -28,6 +30,8 @@ public class Library {
         this.borrowedTheses = new ArrayList<>();
         this.returnedBooks = new ArrayList<>();
         this.returnedTheses = new ArrayList<>();
+        this.ganjinehBooks = new ArrayList<>();
+        this.sellingBooks = new ArrayList<>();
     }
 
     public String getLibId() {
@@ -104,5 +108,21 @@ public class Library {
 
     public void setReturnedTheses(ArrayList<ReturnedThesis> returnedTheses) {
         this.returnedTheses = returnedTheses;
+    }
+
+    public ArrayList<GanjinehBook> getGanjinehBooks() {
+        return ganjinehBooks;
+    }
+
+    public void setGanjinehBooks(ArrayList<GanjinehBook> ganjinehBooks) {
+        this.ganjinehBooks = ganjinehBooks;
+    }
+
+    public ArrayList<SellingBook> getSellingBooks() {
+        return sellingBooks;
+    }
+
+    public void setSellingBooks(ArrayList<SellingBook> sellingBooks) {
+        this.sellingBooks = sellingBooks;
     }
 }

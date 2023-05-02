@@ -107,7 +107,6 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
         }
         if(user_is_borrowing || user_has_penalty){
             System.out.println("not-allowed");
-            return;
         }
         else{
             for(int i=0; i<Campus.getUsers().size(); i++){
