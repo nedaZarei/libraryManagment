@@ -9,9 +9,10 @@ public class Campus {
     private static ArrayList<Student> students = new ArrayList<>();
     private static ArrayList<Staff> staffs = new ArrayList<>();
     private static ArrayList<Professor> professors = new ArrayList<>();
-
     private static ArrayList<GeneralUser> users = new ArrayList<>();
     private static ArrayList<LibraryUser> libraryUsers = new ArrayList<>();
+    private  static ArrayList<String> search_results = new ArrayList<>();
+    private static ArrayList<String> search_user_results = new ArrayList<>();
 
     public static ArrayList<Library> getLibraries() {
         return libraries;
@@ -66,5 +67,21 @@ public class Campus {
 
     public static void setLibraryUsers(ArrayList<LibraryUser> libraryUsers) {
         Campus.libraryUsers = libraryUsers;
+    }
+
+    public static ArrayList<String> getSearch_results() {
+        return search_results;
+    }
+
+    public static void setSearch_results(ArrayList<String> search_results) {
+        Campus.search_results = search_results;
+    }
+
+    public static ArrayList<String> getSearch_user_results() {
+        return search_user_results;
+    }
+
+    public static void setSearch_user_results(ArrayList<String> search_user_results) {
+        Campus.search_user_results = search_user_results;
     }
 }

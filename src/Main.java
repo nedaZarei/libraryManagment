@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
@@ -110,7 +111,7 @@ public class Main {
                     }
                     break;
                 case "borrow":
-                    if(!is_unsuccessful(parts)){
+                    if(!is_unsuccessful(parts,"library_user")){
                         for(int i=0; i<Campus.getLibraryUsers().size(); i++){
                             if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
@@ -121,7 +122,7 @@ public class Main {
                     }
                     break;
                 case "return" :
-                    if(!is_unsuccessful(parts)){
+                    if(!is_unsuccessful(parts,"library_user")){
                         for(int i=0; i<Campus.getLibraryUsers().size(); i++){
                             if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
@@ -132,7 +133,7 @@ public class Main {
                     }
                     break;
                 case "buy" :
-                    if(!is_unsuccessful(parts)){
+                    if(!is_unsuccessful(parts,"general_user")){
                         for(int i=0; i<Campus.getUsers().size(); i++){
                             if(Campus.getUsers().get(i).getId().equals(parts[1])){
 
@@ -143,7 +144,7 @@ public class Main {
                     }
                     break;
                 case "read" :
-                    if(!is_unsuccessful(parts)){
+                    if(!is_unsuccessful(parts,"general_user")){
                         for(int i=0; i<Campus.getUsers().size(); i++){
                             if(Campus.getUsers().get(i).getId().equals(parts[1])){
 
@@ -153,12 +154,42 @@ public class Main {
                         }
                     }
                     break;
-            }
+                case "add-comment" :
+                    if(!is_unsuccessful(parts,"library_user")){
+                        for(int i=0;i<Campus.getLibraryUsers().size(); i++){
+                            if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
+                                Campus.getLibraryUsers().get(i).addComment(parts[3],parts[4],parts[5]);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case "search" :
+                    GeneralUser.search(parts[1]);
+                    if(Campus.getSearch_results().size() == 0){//nothing was found
+                        System.out.println("not-found");
+                    }
+                    else {//something was found
+                       print_search_results();
+                       Campus.getSearch_results().clear(); // clearing this for next search command
+                    }
+                    break;
+                case "search-user" :
+                    if(check_conditions(parts)){
+                      for(int i=0; i<Campus.getLibraryUsers().size(); i++){
+                          if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
+                              Campus.getLibraryUsers().get(i).searchUser(parts[3]);
+                              break;
+                          }
+                      }
+                      Campus.getSearch_user_results().clear();
+                    }
+                    break;
+            }
         }
         while (true);
     }
-
     private static Admin admin_and_checking_other_things(String[] parts) {
 
         for (int i = 0; i < Campus.getUsers().size(); i++) {
@@ -252,19 +283,33 @@ public class Main {
         return null;
     }
 
-    private static boolean is_unsuccessful(String[] parts) {
+    private static boolean is_unsuccessful(String[] parts,String user_type) {
         boolean user_is_found = false, lib_is_found = false, resource_is_found = false;
 
-        for(int i=0; i<Campus.getLibraryUsers().size(); i++){
-            if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
-                user_is_found = true;
-                if(!Campus.getLibraryUsers().get(i).getPassWord().equals(parts[2])){
-                    System.out.println("invalid-pass");
-                    return true;
-                }
-                break;
-            }
-        }
+       if(user_type.equals("library_user")){
+           for(int i=0; i<Campus.getLibraryUsers().size(); i++){
+               if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
+                   user_is_found = true;
+                   if(!Campus.getLibraryUsers().get(i).getPassWord().equals(parts[2])){
+                       System.out.println("invalid-pass");
+                       return true;
+                   }
+                   break;
+               }
+           }
+       }
+       else if(user_type.equals("general_user")){
+           for(int i=0; i<Campus.getUsers().size(); i++){
+               if(Campus.getUsers().get(i).getId().equals(parts[1])){
+                   user_is_found = true;
+                   if(!Campus.getUsers().get(i).getPassWord().equals(parts[2])){
+                       System.out.println("invalid-pass");
+                       return true;
+                   }
+                   break;
+               }
+           }
+       }
         if(!user_is_found){
             System.out.println("not-found");
             return true;
@@ -286,5 +331,34 @@ public class Main {
             return true;
         }
         return false;
+    }
+    private static boolean check_conditions(String[] parts){
+        boolean user_is_found = false;
+        for (int i=0; i<Campus.getUsers().size(); i++){
+            if(Campus.getUsers().get(i).getId().equals(parts[1])){
+                user_is_found = true;
+                if(!Campus.getUsers().get(i).getPassWord().equals(parts[2])){
+                    System.out.println("invalid-pass");
+                    return false;
+                }
+                break;
+            }
+        }
+        if(!user_is_found){
+            System.out.println("not-found");
+            return false;
+        }
+        return true;
+    }
+    private static void print_search_results(){
+        Collections.sort(Campus.getSearch_results()); //SORTING
+        //printing the results
+        for (int i = 0; i < Campus.getSearch_results().size(); i++) {
+            if (i == Campus.getSearch_results().size() - 1)
+                System.out.print(Campus.getSearch_results().get(i));
+            else
+                System.out.print(Campus.getSearch_results().get(i) + "|");
+        }
+        System.out.print("\n");
     }
 }

@@ -117,6 +117,7 @@ abstract public class GeneralUser {
                         Campus.getLibraries().get(i).getGanjinehBooks().get(k).setDateOfReading(date);
                         Campus.getLibraries().get(i).getGanjinehBooks().get(k).setTimeOfReading(time);
                         Campus.getLibraries().get(i).getReadGanjinehBooks().add(Campus.getLibraries().get(i).getGanjinehBooks().get(k));
+                        Campus.getLibraries().get(i).getGanjinehBooks().remove(k);
                         //then after 2 hours it should be removed from this list
                         break;
                     }
@@ -141,5 +142,36 @@ abstract public class GeneralUser {
     private int time_in_minute(String time) {
         String[] t = time.split(":");
         return (Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1])); // minutes since 00:00
+    }
+    public static void search(String word) {
+        String searched_category_id = "";
+        for (int i = 0; i < Campus.getCategories().size(); i++) {
+            if (Campus.getCategories().get(i).getName().toLowerCase().contains(word.toLowerCase())) {
+                searched_category_id = Campus.getCategories().get(i).getCatId();
+                break;
+            }
+        }
+        for (int i = 0; i < Campus.getLibraries().size(); i++) {
+
+            for (int k = 0; k < Campus.getLibraries().get(i).getResources().size(); k++) {
+
+                if (Campus.getLibraries().get(i).getResources().get(k).getTitle().toLowerCase().contains(word.toLowerCase())
+                        || Campus.getLibraries().get(i).getResources().get(k).getAuthorName().toLowerCase().contains(word.toLowerCase())
+                        || Campus.getLibraries().get(i).getResources().get(k).getCategory_id().equals(searched_category_id)) {
+                    Campus.getSearch_results().add(Campus.getLibraries().get(i).getResources().get(k).getId());
+                }
+                if (Campus.getLibraries().get(i).getResources().get(k) instanceof Book) {
+                    Book book = (Book) Campus.getLibraries().get(i).getResources().get(k);
+                    if (book.getPublisher().toLowerCase().contains(word.toLowerCase())) {
+                        Campus.getSearch_results().add(book.getId());
+                    }
+                } else if (Campus.getLibraries().get(i).getResources().get(k) instanceof Thesis) {
+                    Thesis thesis = (Thesis) Campus.getLibraries().get(i).getResources().get(k);
+                    if (thesis.getProfessorName().toLowerCase().contains(word.toLowerCase())) {
+                        Campus.getSearch_results().add(thesis.getId());
+                    }
+                }
+            }
+        }
     }
 }

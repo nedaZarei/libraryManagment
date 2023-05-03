@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 abstract public class LibraryUser extends User {
     public LibraryUser(String id, String passWord, String firstName, String lastName, String nationalId, int birthYear, String address) {
@@ -136,10 +137,12 @@ abstract public class LibraryUser extends User {
                     }
                 }
                 //for returning ganjineh book
-                for(int k=0; k<Campus.getLibraries().get(i).getGanjinehBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getGanjinehBooks().get(k).getId().equals(resource_id)){
+                for(int k=0; k<Campus.getLibraries().get(i).getReadGanjinehBooks().size(); k++){
+                    if(Campus.getLibraries().get(i).getReadGanjinehBooks().get(k).getId().equals(resource_id)){
                         //removing it from ganjineh books that were being read
-                        Campus.getLibraries().get(i).getReadGanjinehBooks().remove(Campus.getLibraries().get(i).getGanjinehBooks().get(k));
+                        Campus.getLibraries().get(i).getReadGanjinehBooks().remove(k);
+                        //then adding it to ganjineh books
+                        Campus.getLibraries().get(i).getGanjinehBooks().add(Campus.getLibraries().get(i).getReadGanjinehBooks().get(k));
                         return;
                     }
                 }
@@ -214,4 +217,84 @@ abstract public class LibraryUser extends User {
         return (minutes2 - minutes1);
     }
     ////////////////////////////////////////////////////////
+    public void addComment(String lib_id,String resource_id,String comment){
+        if(this instanceof Staff){
+            System.out.println("permission-denied");
+            return;
+        }
+        for(int i=0; i<Campus.getLibraries().size(); i++){
+            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+
+                for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
+                    if(Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)){
+
+                        Campus.getLibraries().get(i).getResources().get(k).setComment(comment);
+                        System.out.println("success");
+                        return;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    public void searchUser(String word){
+        if(this instanceof Student){
+            System.out.println("permission-denied");
+            return;
+        }
+        boolean search_successful = false;
+        for(int i=0; i<Campus.getUsers().size(); i++){
+
+            if(Campus.getUsers().get(i) instanceof Student){
+                Student student = (Student) Campus.getUsers().get(i);
+                if(student.getFirstName().toLowerCase().contains(word.toLowerCase())
+                   || student.getLastName().toLowerCase().contains(word.toLowerCase())){
+                        Campus.getSearch_user_results().add(student.getId());
+                        search_successful =true;
+                }
+            }
+            else if(Campus.getUsers().get(i) instanceof Staff){
+                Staff staff = (Staff) Campus.getUsers().get(i);
+                if(staff.getFirstName().toLowerCase().contains(word.toLowerCase())
+                  || staff.getLastName().toLowerCase().contains(word.toLowerCase())){
+                    Campus.getSearch_user_results().add(staff.getId());
+                    search_successful =true;
+                }
+            }
+            else if(Campus.getUsers().get(i) instanceof Professor){
+                Professor professor = (Professor) Campus.getUsers().get(i);
+                if(professor.getFirstName().toLowerCase().contains(word.toLowerCase())
+                || professor.getLastName().toLowerCase().contains(word.toLowerCase())){
+                    Campus.getSearch_user_results().add(professor.getId());
+                    search_successful =true;
+                }
+            }
+            else if(Campus.getUsers().get(i) instanceof Manager){
+                Manager manager = (Manager) Campus.getUsers().get(i);
+                if(manager.getFirstName().toLowerCase().contains(word.toLowerCase())
+                  || manager.getLastName().toLowerCase().contains(word.toLowerCase())){
+                    Campus.getSearch_user_results().add(manager.getId());
+                    search_successful =true;
+                }
+            }
+        }
+        if(!search_successful){
+            System.out.println("not-found");
+            return;
+        }
+        else{
+            Collections.sort(Campus.getSearch_user_results());
+            print_search_result(Campus.getSearch_user_results());
+        }
+    }
+    private void print_search_result(ArrayList<String> results){
+        for(int i=0; i<results.size(); i++){
+            if(i == results.size() - 1)
+                System.out.print(results.get(i));
+            else
+                System.out.print(results.get(i) + "|");
+        }
+        System.out.print("\n");
+    }
+
 }

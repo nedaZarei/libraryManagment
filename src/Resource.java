@@ -4,6 +4,7 @@ abstract public class Resource {
     private String authorName;
     private String category_id; //optional(if a book doesn't have category -> null)
     private String library_id;
+    private String comment;
 
     public Resource(String id, String title, String authorName, String category_id, String library_id) {
         this.id = id;
@@ -51,5 +52,13 @@ abstract public class Resource {
 
     public void setLibrary_id(String library_id) {
         this.library_id = library_id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
