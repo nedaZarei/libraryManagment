@@ -27,6 +27,17 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
             }
         }
         Campus.getCategories().add(category);
+        //if upper category is not null,
+        // this category should be added to that upper category's list of lower categories
+        if(!category.getUpperCategoryId().equals("null")){
+
+            for(int i=0; i<Campus.getCategories().size(); i++){
+                if(Campus.getCategories().get(i).getCatId().equals(category.getUpperCategoryId())){
+                    Campus.getCategories().get(i).getLowerCategories().add(category);
+                    break;
+                }
+            }
+        }
         System.out.println("success");
     }
     private static boolean adding_user(User user) {
@@ -124,5 +135,15 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
             }
             System.out.println("success");
         }
+    }
+    public void report_penalties_sum(){
+        int sum = 0;
+        for(int i=0; i<Campus.getLibraries().size(); i++){
+
+            for(int k=0; k<Campus.getLibraries().get(i).getReturnedResources().size(); k++){
+                sum += Campus.getLibraries().get(i).getReturnedResources().get(k).getPenalty();
+            }
+        }
+        System.out.println(sum);
     }
 }

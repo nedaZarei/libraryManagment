@@ -12,25 +12,13 @@ public class Book extends Resource {
 
     public String getPublisher() {
         return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+    };
 
     public int getPublishYear() {
         return publishYear;
     }
 
-    public void setPublishYear(int publishYear) {
-        this.publishYear = publishYear;
-    }
-
     public int getNumberOfCopies() {
         return numberOfCopies;
-    }
-
-    public void setNumberOfCopies(int numberOfCopies) {
-        this.numberOfCopies = numberOfCopies;
     }
 }

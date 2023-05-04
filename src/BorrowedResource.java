@@ -17,10 +17,6 @@ abstract public class BorrowedResource{
         return costumer_id;
     }
 
-    public void setCostumer_id(String costumer_id) {
-        this.costumer_id = costumer_id;
-    }
-
     public String getLib_id() {
         return lib_id;
     }
@@ -31,10 +27,6 @@ abstract public class BorrowedResource{
 
     public String getItem_id() {
         return item_id;
-    }
-
-    public void setItem_id(String item_id) {
-        this.item_id = item_id;
     }
 
     public String getDate_of_borrowing() {
