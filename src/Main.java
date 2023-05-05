@@ -136,6 +136,7 @@ public class Main {
                                //we are sure this user is a manager (because we checked in checking_other_things method)
                                    Manager manager = (Manager) Campus.getUsers().get(i);
                                    manager.addBook(book,parts[10]);
+                                   break;
                            }
                        }
                     }
@@ -148,6 +149,7 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.addThesis(thesis,parts[9]);
+                                break;
                             }
                         }
                     }
@@ -160,6 +162,7 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.addGanjinehBook(ganjinehBook,parts[10]);
+                                break;
                             }
                         }
                     }
@@ -172,6 +175,7 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.addSellingBook(sellingBook,parts[12]);
+                                break;
                             }
                         }
                     }
@@ -183,6 +187,7 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.removeResource(parts[3],parts[4]);
+                                break;
                             }
                         }
                     }
@@ -270,6 +275,7 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.categoryReport(parts[3],parts[4]);
+                                break;
                             }
                         }
                     }
@@ -281,11 +287,22 @@ public class Main {
                                 //we are sure this user is a manager (because we checked in checking_other_things method)
                                 Manager manager = (Manager) Campus.getUsers().get(i);
                                 manager.libraryReport(parts[3]);
+                                break;
                             }
                         }
                     }
                     break;
                 case "report-passed-deadline" :
+                    if(manager_and_checking_other_things(parts[1],parts[2],"null",parts[3])){
+                        for(int i=0; i<Campus.getUsers().size(); i++){
+                            if(Campus.getUsers().get(i).getId().equals(parts[1])){
+                                //we are sure this user is a manager (because we checked in checking_other_things method)
+                                Manager manager = (Manager) Campus.getUsers().get(i);
+                                manager.reportPassedDeadline(parts[3],parts[4],parts[5]);
+                                break;
+                            }
+                        }
+                    }
                     break;
                 case "report-penalties-sum" :
                     if(admin_and_checking_other_things(parts)){

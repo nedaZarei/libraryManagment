@@ -1,3 +1,5 @@
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,AddSellingBook,RemoveResource{
 
@@ -88,7 +90,7 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                 }
                 for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
-                    if(Campus.getLibraries().get(i).getResources().get(k).equals(resource_id)){
+                    if(Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)){
                         Campus.getLibraries().get(i).getResources().remove(k);
                         break; //not returning,so it would remove from the specific list too
                     }
@@ -259,4 +261,121 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
         }
         System.out.printf("%d %d %d %d %d %d\n",book_count,thesis_count,borrowed_book_count,borrowed_thesis_count,ganjineh_count,selling_count);
     }
+    public void reportPassedDeadline(String lib_id,String check_date,String check_time){
+        LinkedHashSet<String> passed_deadline_items = new LinkedHashSet<>();//keeps the order of insertion but doesn't allow duplicates
+        String user_id;
+        for(int i=0; i<Campus.getLibraries().size(); i++){
+            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+
+                for(int k=0; k<Campus.getLibraries().get(i).getBorrowedResources().size(); k++){
+
+                    if(Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedBook){
+                        BorrowedBook borrowedBook = (BorrowedBook) Campus.getLibraries().get(i).getBorrowedResources().get(k);
+                        user_id = borrowedBook.getCostumer_id();
+
+                        if(what_lib_user(user_id).equals("student")){
+                            if(hour_diff(borrowedBook,check_date,check_time) > (10*24)){
+                                passed_deadline_items.add(borrowedBook.getItem_id());
+                            }
+                        }
+                        else if(what_lib_user(user_id).equals("staff")){
+                            if(hour_diff(borrowedBook,check_date,check_time) > (14*24)){
+                                passed_deadline_items.add(borrowedBook.getItem_id());
+                            }
+                        }
+                    }
+                    else if(Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedThesis){
+                        BorrowedThesis borrowedThesis = (BorrowedThesis) Campus.getLibraries().get(i).getBorrowedResources().get(k);
+                        user_id = borrowedThesis.getCostumer_id();
+
+                        if(what_lib_user(user_id).equals("student")){
+                            if(hour_diff(borrowedThesis,check_date,check_time) > (7*24)){
+                                passed_deadline_items.add(borrowedThesis.getItem_id());
+                            }
+                        }
+                        else if(what_lib_user(user_id).equals("staff")){
+                            if(hour_diff(borrowedThesis,check_date,check_time) > (10*24)){
+                                passed_deadline_items.add(borrowedThesis.getItem_id());
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        if (passed_deadline_items.size() == 0){
+            System.out.println("none");
+            return;
+        }
+        Iterator<String> iterate = passed_deadline_items.iterator();
+        while (iterate.hasNext()) {
+            System.out.print(iterate.next());
+            if (iterate.hasNext()) {
+                System.out.print("|");
+            }
+        }
+        System.out.print("\n");
+    }
+    private String what_lib_user(String user_id){
+        for(int i=0; i<Campus.getLibraryUsers().size(); i++){
+            if(Campus.getLibraryUsers().get(i).getId().equals(user_id)){
+                if(Campus.getLibraryUsers().get(i) instanceof Student){
+                    return "student";
+                }
+                else if(Campus.getLibraryUsers().get(i) instanceof Staff
+                         || Campus.getLibraryUsers().get(i) instanceof Professor){
+                    return "staff";
+                }
+            }
+        }
+        return "";
+    }
+    private int hour_diff(BorrowedResource borrowedResource,String check_date,String check_time){
+        int day_difference = 0;
+        int hour_difference = 0;
+        String borrow_date = borrowedResource.getDate_of_borrowing();
+        String borrow_time = borrowedResource.getTime_of_borrowing();
+        int checking_time = time_in_minute(check_time);
+        int borrowing_time = time_in_minute(borrow_time);
+        int time_difference = time_difference_in_minute(borrow_time, check_time);
+        int date_difference = date_difference_in_minute(borrow_date, check_date);
+
+        if (borrow_time.equals(check_time)) {
+            day_difference = date_difference / (24 * 60);
+        } else {
+            if (checking_time > borrowing_time) {
+                day_difference = (time_difference + date_difference) / (24 * 60);
+                hour_difference+=time_difference/60;
+
+            } else if (checking_time < borrowing_time) {
+                day_difference = (date_difference - time_difference) / (24 * 60);
+                hour_difference-=time_difference/60;
+            }
+        }
+        hour_difference += day_difference * 24;
+        return hour_difference;
+    }
+    //////////////////////////////calculating time methods
+    private int time_in_minute(String time) {
+        String[] t = time.split(":");
+        return (Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1])); // minutes since 00:00
+    }
+
+    private int date_in_minute(String date) {
+        String[] d = date.split("-");
+        return (Integer.parseInt(d[2]) * 24 * 60 + Integer.parseInt(d[1]) * 30 * 24 * 60 + Integer.parseInt(d[0]) * 365 * 30 * 24 * 60);
+    }
+
+    private int time_difference_in_minute(String time1, String time2) {
+        int minutes1 = time_in_minute(time1);
+        int minutes2 = time_in_minute(time2);
+        return (minutes2 - minutes1);
+    }
+
+    private int date_difference_in_minute(String date1, String date2) {
+        int minutes1 = date_in_minute(date1);
+        int minutes2 = date_in_minute(date2);
+        return (minutes2 - minutes1);
+    }
+    ////////////////////////////////////////////////////////
 }

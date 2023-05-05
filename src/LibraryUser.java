@@ -14,20 +14,23 @@ abstract public class LibraryUser extends User {
         for (int i = 0; i < Campus.getLibraries().size(); i++) {
             if (Campus.getLibraries().get(i).getLibId().equals(lib_id)) {
 
-                for (int k = 0; k < Campus.getLibraries().get(i).getBooks().size(); k++) {
-                    if (Campus.getLibraries().get(i).getBooks().get(k).getId().equals(resource_id)) {
-                        is_book = true;
-                        break;
-                    }
-                }
-                for (int k = 0; k < Campus.getLibraries().get(i).getTheses().size(); k++) {
-                    if (Campus.getLibraries().get(i).getTheses().get(k).getId().equals(resource_id)) {
-                        is_thesis = true;
+                for (int k = 0; k < Campus.getLibraries().get(i).getResources().size(); k++) {
+                    if (Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)) {
+                        if (Campus.getLibraries().get(i).getResources().get(k) instanceof Book) {
+                            is_book = true;
+                        } else if (Campus.getLibraries().get(i).getResources().get(k) instanceof Thesis) {
+                            is_thesis = true;
+                        }
+                        else if(Campus.getLibraries().get(i).getResources().get(k) instanceof GanjinehBook
+                                 || Campus.getLibraries().get(i).getResources().get(k) instanceof SellingBook){
+                            System.out.println("not-allowed");
+                            return;
+                        }
                         break;
                     }
                 }
                 for (int k = 0; k < Campus.getLibraries().get(i).getBorrowedResources().size(); k++) {
-                    if (Campus.getLibraries().get(i).getBorrowedResources().get(k).getCostumer_id().equals(user_id)) {
+                    if (Campus.getLibraries().get(i).getBorrowedResources().get(k).getCostumer_id().equals(user_id)){
                         user_borrowing_count++;
                     }
                     if (Campus.getLibraries().get(i).getBorrowedResources().get(k).getItem_id().equals(resource_id)) {
@@ -38,10 +41,14 @@ abstract public class LibraryUser extends User {
                             return;
                         }
                         resource_borrowed_count++;
-                        if (Campus.getLibraries().get(i).getResources().get(k) instanceof Book) {
-                            Book book = (Book) Campus.getLibraries().get(i).getResources().get(k);
-                            number = book.getNumberOfCopies();
-                        } else if (Campus.getLibraries().get(i).getResources().get(k) instanceof Thesis) {
+                        if (Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedBook) {
+                           for(int f=0; f<Campus.getLibraries().get(i).getBooks().size(); f++){
+                               if(Campus.getLibraries().get(i).getBooks().get(f).getId().equals(resource_id)){
+                                   number = Campus.getLibraries().get(i).getBooks().get(f).getNumberOfCopies();
+                                   break;
+                               }
+                           }
+                        } else if (Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedThesis) {
                             number = 1;
                         }
                     }
@@ -50,18 +57,6 @@ abstract public class LibraryUser extends User {
                     if (Campus.getLibraries().get(i).getReturnedResources().get(k).getCostumer_id().equals(user_id)
                             && Campus.getLibraries().get(i).getReturnedResources().get(k).getPenalty() != 0) {
                         //this user did not return a resource on time
-                        System.out.println("not-allowed");
-                        return;
-                    }
-                }
-                for (int k = 0; k < Campus.getLibraries().get(i).getGanjinehBooks().size(); k++) {
-                    if (Campus.getLibraries().get(i).getGanjinehBooks().get(k).getId().equals(resource_id)) {
-                        System.out.println("not-allowed");
-                        return;
-                    }
-                }
-                for (int k = 0; k < Campus.getLibraries().get(i).getSellingBooks().size(); k++) {
-                    if (Campus.getLibraries().get(i).getSellingBooks().get(k).getId().equals(resource_id)) {
                         System.out.println("not-allowed");
                         return;
                     }
@@ -78,7 +73,7 @@ abstract public class LibraryUser extends User {
                 System.out.println("not-allowed");
                 return;
             }
-        } else if (this instanceof Staff) {
+        } else if (this instanceof Staff || this instanceof Professor) {
             if (user_borrowing_count == 5) {
                 System.out.println("not-allowed");
                 return;
@@ -98,8 +93,8 @@ abstract public class LibraryUser extends User {
                     System.out.println("success");
                     return;
                 }
+                break;
             }
-            break;
         }
     }
     public void returnResource(String user_id, String lib_id, String resource_id, String return_date, String return_time){
@@ -108,7 +103,7 @@ abstract public class LibraryUser extends User {
        if(this instanceof Student){
            is_student = true;
        }
-       else if(this instanceof Staff){
+       else if(this instanceof Staff || this instanceof Professor){
            is_staff = true;
        }
         int penalty = 0; // penalty money for late returning
@@ -122,12 +117,12 @@ abstract public class LibraryUser extends User {
                         has_borrowed = true;
 
                         if(Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedBook){
-                          penalty = calculate_penalty(Campus.getLibraries().get(i).getBorrowedResources().get(k),return_date,return_time,is_student,is_staff,10,14);
+                          penalty += calculate_penalty(Campus.getLibraries().get(i).getBorrowedResources().get(k),return_date,return_time,is_student,is_staff,10,14);
                           ReturnedBook returnedBook = new ReturnedBook(lib_id,resource_id,user_id,return_date,return_time,penalty);
                             Campus.getLibraries().get(i).getReturnedResources().add(returnedBook);
                         }
                         else if(Campus.getLibraries().get(i).getBorrowedResources().get(k) instanceof BorrowedThesis){
-                            penalty = calculate_penalty(Campus.getLibraries().get(i).getBorrowedResources().get(k),return_date,return_time,is_student,is_staff,7,10);
+                            penalty += calculate_penalty(Campus.getLibraries().get(i).getBorrowedResources().get(k),return_date,return_time,is_student,is_staff,7,10);
                             ReturnedThesis returnedThesis = new ReturnedThesis(lib_id,resource_id,user_id,return_date,return_time,penalty);
                             Campus.getLibraries().get(i).getReturnedResources().add(returnedThesis);
                         }
