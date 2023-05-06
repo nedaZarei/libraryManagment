@@ -6,16 +6,16 @@ public class Library {
     private final int startYear;
     private final int numberOfDesks;
     private final String address;
-    private ArrayList<Manager> managers;
-    private ArrayList<Resource> resources;
-    private  ArrayList<Book> books;
-    private  ArrayList<Thesis> theses;
-    private ArrayList<BorrowedResource> borrowedResources;
-    private ArrayList<ReturnedResource> returnedResources;
-    private  ArrayList<GanjinehBook> ganjinehBooks;
-    private ArrayList<SellingBook> sellingBooks;
-    private ArrayList<SellingBook> boughtBooks;
-    private ArrayList<GanjinehBook> readGanjinehBooks;
+    private  ArrayList<Manager> managers = new ArrayList<>();
+    private  ArrayList<Resource> resources =new ArrayList<>();
+    private  ArrayList<Book> books = new ArrayList<>();
+    private   ArrayList<Thesis> theses = new ArrayList<>();
+    private   ArrayList<BorrowedResource> borrowedResources =new ArrayList<>();
+    private   ArrayList<ReturnedResource> returnedResources = new ArrayList<>();
+    private  ArrayList<GanjinehBook> ganjinehBooks=new ArrayList<>();
+    private  ArrayList<SellingBook> sellingBooks=new ArrayList<>();
+    private  ArrayList<SellingBook> boughtBooks=new ArrayList<>();
+    private  ArrayList<GanjinehBook> readGanjinehBooks=new ArrayList<>();
 
     public Library(String libId, String name, int startYear, int numberOfDesks, String address) {
         this.libId = libId;
@@ -23,16 +23,42 @@ public class Library {
         this.startYear = startYear;
         this.numberOfDesks = numberOfDesks;
         this.address = address;
-        this.managers = new ArrayList<>();
-        this.resources = new ArrayList<>();
-        this.books = new ArrayList<>();
-        this.theses = new ArrayList<>();
-        this.borrowedResources = new ArrayList<>();
-        this.returnedResources = new ArrayList<>();
-        this.ganjinehBooks = new ArrayList<>();
-        this.sellingBooks = new ArrayList<>();
-        this.boughtBooks = new ArrayList<>();
-        this.readGanjinehBooks = new ArrayList<>();
+    }
+
+    public void setManagers(ArrayList<Manager> managers) {
+        this.managers = managers;
+    }
+
+    public void setResources(ArrayList<Resource> resources) {
+        this.resources = resources;
+    }
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+
+    public void setTheses(ArrayList<Thesis> theses) {
+        this.theses = theses;
+    }
+
+    public void setGanjinehBooks(ArrayList<GanjinehBook> ganjinehBooks) {
+        this.ganjinehBooks = ganjinehBooks;
+    }
+
+    public void setSellingBooks(ArrayList<SellingBook> sellingBooks) {
+        this.sellingBooks = sellingBooks;
+    }
+
+    public void setReadGanjinehBooks(ArrayList<GanjinehBook> readGanjinehBooks) {
+        this.readGanjinehBooks = readGanjinehBooks;
+    }
+
+    public void setBorrowedResources(ArrayList<BorrowedResource> borrowedResources) {
+        this.borrowedResources = borrowedResources;
+    }
+
+    public void setReturnedResources(ArrayList<ReturnedResource> returnedResources) {
+        this.returnedResources = returnedResources;
     }
 
     public String getLibId() {
@@ -63,60 +89,29 @@ public class Library {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
-        this.resources = resources;
-    }
-
-    public void setManagers(ArrayList<Manager> managers) {
-        this.managers = managers;
-    }
-
     public ArrayList<Book> getBooks() {
         return books;
-    }
-
-    public void setBooks(ArrayList<Book> books) {
-        this.books = books;
     }
 
     public ArrayList<Thesis> getTheses() {
         return theses;
     }
 
-    public void setTheses(ArrayList<Thesis> theses) {
-        this.theses = theses;
-    }
 
     public ArrayList<GanjinehBook> getGanjinehBooks() {
         return ganjinehBooks;
-    }
-
-    public void setGanjinehBooks(ArrayList<GanjinehBook> ganjinehBooks) {
-        this.ganjinehBooks = ganjinehBooks;
     }
 
     public ArrayList<SellingBook> getSellingBooks() {
         return sellingBooks;
     }
 
-    public void setSellingBooks(ArrayList<SellingBook> sellingBooks) {
-        this.sellingBooks = sellingBooks;
-    }
-
     public ArrayList<BorrowedResource> getBorrowedResources() {
         return borrowedResources;
     }
 
-    public void setBorrowedResources(ArrayList<BorrowedResource> borrowedResources) {
-        this.borrowedResources = borrowedResources;
-    }
-
     public ArrayList<ReturnedResource> getReturnedResources() {
         return returnedResources;
-    }
-
-    public void setReturnedResources(ArrayList<ReturnedResource> returnedResources) {
-        this.returnedResources = returnedResources;
     }
 
     public ArrayList<SellingBook> getBoughtBooks() {
@@ -129,9 +124,5 @@ public class Library {
 
     public ArrayList<GanjinehBook> getReadGanjinehBooks() {
         return readGanjinehBooks;
-    }
-
-    public void setReadGanjinehBooks(ArrayList<GanjinehBook> readGanjinehBooks) {
-        this.readGanjinehBooks = readGanjinehBooks;
     }
 }

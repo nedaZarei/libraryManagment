@@ -5,80 +5,95 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
     public Manager(String id, String passWord,String firstName,String lastName,String nationalId,Integer birthYear,String address){
         super(id,passWord,firstName,lastName,nationalId,birthYear,address);
     }
-    @Override
-    public void addBook(Book book, String lib_id){
+    private boolean is_duplicate_id(String resource_id,String lib_id){
         for(int i=0; i<Campus.getLibraries().size(); i++){
             if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
 
-                for(int k=0; k<Campus.getLibraries().get(i).getBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getBooks().get(k).getId().equals(book.getId())){
+                for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
+                    if(Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)){
                         System.out.println("duplicate-id");
-                        return;
+                        return true;
                     }
                 }
-                Campus.getLibraries().get(i).getBooks().add(book);
-                Campus.getLibraries().get(i).getResources().add(book);
-                System.out.println("success");
                 break;
+            }
+        }
+        return false;
+    }
+    @Override
+    public void addBook(Book book, String lib_id){
+
+        if(!is_duplicate_id(book.getId(), lib_id)){
+            for(int i=0; i<Campus.getLibraries().size(); i++){
+                if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+
+                    Campus.getLibraries().get(i).getBooks().add(book);
+                    Campus.getLibraries().get(i).getResources().add(book);
+                    System.out.println("success");
+                    break;
+                }
             }
         }
     }
     @Override
     public void addThesis(Thesis thesis, String lib_id){
-        for(int i=0; i<Campus.getLibraries().size(); i++){
-            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+        if(!is_duplicate_id(thesis.getId(), lib_id)){
+            for(int i=0; i<Campus.getLibraries().size(); i++){
+                if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
 
-                for(int k=0; k<Campus.getLibraries().get(i).getTheses().size(); k++){
-                    if(Campus.getLibraries().get(i).getTheses().get(k).getId().equals(thesis.getId())){
-                        System.out.println("duplicate-id");
-                        return;
-                    }
+                    Campus.getLibraries().get(i).getTheses().add(thesis);
+                    Campus.getLibraries().get(i).getResources().add(thesis);
+                    System.out.println("success");
+                    break;
                 }
-                Campus.getLibraries().get(i).getTheses().add(thesis);
-                Campus.getLibraries().get(i).getResources().add(thesis);
-                System.out.println("success");
-                break;
             }
         }
     }
     @Override
     public void addGanjinehBook(GanjinehBook ganjinehBook, String lib_id){
-        for(int i=0; i<Campus.getLibraries().size(); i++){
-            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+       if(!is_duplicate_id(ganjinehBook.getId(),lib_id)){
+           for(int i=0; i<Campus.getLibraries().size(); i++){
+               if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
 
-                for(int k=0; k<Campus.getLibraries().get(i).getGanjinehBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getGanjinehBooks().get(k).getId().equals(ganjinehBook.getId())){
-                        System.out.println("duplicate-id");
-                        return;
-                    }
-                }
-                Campus.getLibraries().get(i).getGanjinehBooks().add(ganjinehBook);
-                Campus.getLibraries().get(i).getResources().add(ganjinehBook);
-                System.out.println("success");
-                break;
-            }
-        }
+                   Campus.getLibraries().get(i).getGanjinehBooks().add(ganjinehBook);
+                   Campus.getLibraries().get(i).getResources().add(ganjinehBook);
+                   System.out.println("success");
+                   break;
+               }
+           }
+       }
     }
     @Override
     public void addSellingBook(SellingBook sellingBook, String lib_id){
-        for(int i=0; i<Campus.getLibraries().size(); i++){
-            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+        if(!is_duplicate_id(sellingBook.getId(), lib_id)){
+            for(int i=0; i<Campus.getLibraries().size(); i++){
+                if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
 
-                for(int k=0; k<Campus.getLibraries().get(i).getSellingBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getSellingBooks().get(k).getId().equals(sellingBook.getId())){
-                        System.out.println("duplicate-id");
-                        return;
-                    }
+                    Campus.getLibraries().get(i).getSellingBooks().add(sellingBook);
+                    Campus.getLibraries().get(i).getResources().add(sellingBook);
+                    System.out.println("success");
+                    break;
                 }
-                Campus.getLibraries().get(i).getSellingBooks().add(sellingBook);
-                Campus.getLibraries().get(i).getResources().add(sellingBook);
-                System.out.println("success");
-                break;
             }
         }
     }
     @Override
     public void removeResource(String resource_id, String lib_id) {
+        boolean resource_is_found = false;
+        for(int i=0; i<Campus.getLibraries().size(); i++){
+            if(Campus.getLibraries().get(i).getLibId().equals(lib_id)){
+                for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
+                    if(Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)){
+                        resource_is_found = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if(!resource_is_found){
+            System.out.println("not-found");
+            return;
+        }
         for (int i = 0; i < Campus.getLibraries().size(); i++) {
             if (Campus.getLibraries().get(i).getLibId().equals(lib_id)) {
 
@@ -88,40 +103,49 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                         return;
                     }
                 }
-                for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
-                    if(Campus.getLibraries().get(i).getResources().get(k).getId().equals(resource_id)){
-                        Campus.getLibraries().get(i).getResources().remove(k);
-                        break; //not returning,so it would remove from the specific list too
-                    }
-                }
-                for(int k=0; k < Campus.getLibraries().get(i).getBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getBooks().get(k).getId().equals(resource_id)){
-                       Campus.getLibraries().get(i).getBooks().remove(k);
-                       return;
-                    }
-                }
-                for(int k=0; k < Campus.getLibraries().get(i).getTheses().size(); k++){
-                    if(Campus.getLibraries().get(i).getTheses().get(k).getId().equals(resource_id)){
-                        Campus.getLibraries().get(i).getTheses().remove(k);
-                        return;
-                    }
-                }
-                for(int k=0; k < Campus.getLibraries().get(i).getGanjinehBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getGanjinehBooks().get(k).getId().equals(resource_id)){
-                       Campus.getLibraries().get(i).getGanjinehBooks().remove(k);
-                       return;
-                    }
-                }
-                for(int k=0; k < Campus.getLibraries().get(i).getSellingBooks().size(); k++){
-                    if(Campus.getLibraries().get(i).getSellingBooks().get(k).getId().equals(resource_id)){
-                       Campus.getLibraries().get(i).getSellingBooks().remove(k);
-                       return;
+                for (int s = 0; s < Campus.getLibraries().get(i).getResources().size(); s++) {
+                    if (Campus.getLibraries().get(i).getResources().get(s).getId().equals(resource_id)) {
+
+                        if(Campus.getLibraries().get(i).getResources().get(s) instanceof Book){
+                            for(int k=0; k < Campus.getLibraries().get(i).getBooks().size(); k++){
+                                if(Campus.getLibraries().get(i).getBooks().get(k).getId().equals(resource_id)){
+                                    Campus.getLibraries().get(i).getBooks().remove(k);
+                                    break;
+                                }
+                            }
+                        }
+                        else if(Campus.getLibraries().get(i).getResources().get(s) instanceof Thesis){
+                            for(int k=0; k < Campus.getLibraries().get(i).getTheses().size(); k++){
+                                if(Campus.getLibraries().get(i).getTheses().get(k).getId().equals(resource_id)){
+                                    Campus.getLibraries().get(i).getTheses().remove(k);
+                                    break;
+                                }
+                            }
+                        }
+                        else if(Campus.getLibraries().get(i).getResources().get(s) instanceof GanjinehBook){
+                            for(int k=0; k < Campus.getLibraries().get(i).getGanjinehBooks().size(); k++){
+                                if(Campus.getLibraries().get(i).getGanjinehBooks().get(k).getId().equals(resource_id)){
+                                    Campus.getLibraries().get(i).getGanjinehBooks().remove(k);
+                                    break;
+                                }
+                            }
+                        }
+                        else if(Campus.getLibraries().get(i).getResources().get(s) instanceof SellingBook){
+                            for(int k=0; k < Campus.getLibraries().get(i).getSellingBooks().size(); k++){
+                                if(Campus.getLibraries().get(i).getSellingBooks().get(k).getId().equals(resource_id)){
+                                    Campus.getLibraries().get(i).getSellingBooks().remove(k);
+                                    break;
+                                }
+                            }
+                        }
+                        Campus.getLibraries().get(i).getResources().remove(s);
+                        break;
                     }
                 }
                 break;
-
             }
         }
+        System.out.println("success");
     }
     static int book_count = 0, thesis_count= 0, ganjineh_count=0, selling_count=0;
     public void categoryReport(String cat_id, String lib_id){
@@ -135,7 +159,8 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                 for(int k=0; k<Campus.getLibraries().get(i).getResources().size(); k++){
 
                     if(is_null && Campus.getLibraries().get(i).getResources().get(k).getCategory_id().equals("null")){
-                        if(Campus.getLibraries().get(i).getResources().get(k) instanceof Book){
+                        if((Campus.getLibraries().get(i).getResources().get(k) instanceof Book)
+                                && !(Campus.getLibraries().get(i).getResources().get(k) instanceof SellingBook)){
                             book_count += ((Book) Campus.getLibraries().get(i).getResources().get(k)).getNumberOfCopies();
                         }
                         else if(Campus.getLibraries().get(i).getResources().get(k) instanceof Thesis){
@@ -150,7 +175,8 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                     }
                     else if((!is_null) && (!Campus.getLibraries().get(i).getResources().get(k).getCategory_id().equals("null"))){
 
-                        if(Campus.getLibraries().get(i).getResources().get(k) instanceof Book){
+                        if((Campus.getLibraries().get(i).getResources().get(k) instanceof Book)
+                                && !(Campus.getLibraries().get(i).getResources().get(k) instanceof SellingBook)){
                             Book book = (Book) Campus.getLibraries().get(i).getResources().get(k);
 
                                 if(book.getCategory_id().equals(cat_id)){
@@ -204,7 +230,8 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
                         for(int p=0; p<library.getResources().size(); p++){
                             if(library.getResources().get(p).getCategory_id().equals(Campus.getCategories().get(j).getLowerCategories().get(q).getCatId())){
 
-                                if(library.getResources().get(p) instanceof Book){
+                                if((library.getResources().get(p) instanceof Book)
+                                        && !(library.getResources().get(p) instanceof SellingBook)){
                                     book_count += ((Book) library.getResources().get(p)).getNumberOfCopies();
                                 }
                                 else if(library.getResources().get(p) instanceof Thesis){

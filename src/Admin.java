@@ -108,7 +108,7 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
 
             for(int k=0; k<Campus.getLibraries().get(i).getBorrowedResources().size(); k++){
 
-                if(Campus.getLibraries().get(i).getReturnedResources().get(k).getCostumer_id().equals(user_id)){
+                if(Campus.getLibraries().get(i).getBorrowedResources().get(k).getCostumer_id().equals(user_id)){
                     user_is_borrowing = true;
                     break;
                 }

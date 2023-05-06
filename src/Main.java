@@ -33,9 +33,10 @@ public class Main {
                     break;
                 case "add-category":
                     boolean upper_category_is_found = false;
-                    if ( admin_and_checking_other_things(parts) && (!parts[5].equals("null")) ) {
+                    if (!parts[5].equals("null") ) {
                         for (int i = 0; i < Campus.getCategories().size(); i++) {
-                            if (Campus.getCategories().get(i).getCatId().equals(parts[5])) {
+                            if (Campus.getCategories().get(i).getCatId().equals(parts[5])
+                                   || Campus.getCategories().get(i).getName().equals(parts[5])) {
                                 upper_category_is_found = true;
                                 break;
                             }
@@ -240,11 +241,11 @@ public class Main {
                     }
                     break;
                 case "add-comment" :
-                    if(!is_unsuccessful(parts,"library_user","add-comment")){
-                        for(int i=0;i<Campus.getLibraryUsers().size(); i++){
-                            if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
+                    if(!is_unsuccessful(parts,"general_user","add-comment")){
+                        for(int i=0;i<Campus.getUsers().size(); i++){
+                            if(Campus.getUsers().get(i).getId().equals(parts[1])){
 
-                                Campus.getLibraryUsers().get(i).addComment(parts[3],parts[4],parts[5]);
+                                Campus.getUsers().get(i).addComment(parts[3],parts[4],parts[5]);
                                 break;
                             }
                         }
@@ -262,9 +263,9 @@ public class Main {
                     break;
                 case "search-user" :
                     if(check_conditions(parts)){
-                      for(int i=0; i<Campus.getLibraryUsers().size(); i++){
-                          if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
-                              Campus.getLibraryUsers().get(i).searchUser(parts[3]);
+                      for(int i=0; i<Campus.getUsers().size(); i++){
+                          if(Campus.getUsers().get(i).getId().equals(parts[1])){
+                              Campus.getUsers().get(i).searchUser(parts[3]);
                               break;
                           }
                       }
