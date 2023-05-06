@@ -4,7 +4,7 @@ public class Category {
     private final String catId;
     private final String name;
     private String upperCategoryId;
-    private ArrayList<Category> lowerCategories;
+    private ArrayList<Category> lowerCategories = new ArrayList<>();
 
     public Category(String catId, String name, String upperCategoryId) {
         this.catId = catId;

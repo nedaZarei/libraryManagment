@@ -1,5 +1,4 @@
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,AddSellingBook,RemoveResource{
 
@@ -378,4 +377,125 @@ public class Manager extends User implements AddBook,AddThesis,AddGanginehBook,A
         return (minutes2 - minutes1);
     }
     ////////////////////////////////////////////////////////
+//    public void reportMostPopular(String lib_id){
+//        ArrayList<String> book_ids = new ArrayList<>();
+//        ArrayList<String> thesis_ids = new ArrayList<>();
+//        ArrayList<String> book_periods = new ArrayList<>();
+//        ArrayList<String> thesis_periods = new ArrayList<>();
+//       int period_of_borrowing = 0;
+//
+//        for(int i=0; i<Logger.getBorrows().size(); i++){
+//                String[] parts = Logger.getBorrows().get(i).split(" ");
+//
+//                if(parts[0].equals("SUCCESS") && parts[5].equals(lib_id)){
+//
+//                    for(int k=0;k<Campus.getLibraries().size(); k++){
+//                        if(Campus.getLibraries().get(k).getLibId().equals(lib_id)){
+//
+//                            for(int p=0; p<Campus.getLibraries().get(k).getBorrowedResources().size(); p++){
+//                                if(Campus.getLibraries().get(k).getBorrowedResources().get(p).getItem_id().equals(parts[4])){
+//
+//                                    if(Campus.getLibraries().get(k).getBorrowedResources().get(p) instanceof BorrowedBook){
+//                                        book_ids.add(parts[4]);
+//                                       period_of_borrowing = hour_difference(Campus.getLibraries().get(k).getBorrowedResources().get(p),Campus.getLibraries().get(k),parts[4]);
+//                                        book_periods.add(parts[4]+" "+period_of_borrowing);
+//                                    }
+//                                    else if(Campus.getLibraries().get(k).getBorrowedResources().get(p) instanceof BorrowedThesis){
+//                                       thesis_ids.add(parts[4]);
+//                                        period_of_borrowing = hour_difference(Campus.getLibraries().get(k).getBorrowedResources().get(p),Campus.getLibraries().get(k),parts[4]);
+//                                        thesis_periods.add(parts[4]+" "+period_of_borrowing);
+//                                    }
+//                                }
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//        }
+//        int most_book_count = most_frequent_count(book_ids);
+//        int most_thesis_count = most_frequent_count(thesis_ids);
+//        String book_id = most_frequent_id(book_ids);
+//        String thesis_id = most_frequent_id(thesis_ids);
+//
+//        for(int i=0;i<book_periods.size(); i++){
+//            String[] parts1 = book_periods.get(i).split(" ");
+//            String id = parts1[0];
+//            int time = Integer.parseInt(parts1[1]);
+//            for(int j=i+1; j<book_periods.size(); j++){
+//                String[] parts2 = book_periods.get(i).split(" ");
+//                if(id.equals(parts2[0])){
+//                    if(time <  Integer.parseInt(parts2[1])){
+//                        time =  Integer.parseInt(parts2[1]);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    private int hour_difference(BorrowedResource borrowedResource, Library library,String id){
+//        String return_time="",return_date="";
+//        int day_difference =0,hour_difference=0;
+//        String borrow_date = borrowedResource.getDate_of_borrowing();
+//        String borrow_time = borrowedResource.getTime_of_borrowing();
+//
+//        for(int f=0; f<library.getReturnedResources().size(); f++){
+//            if(library.getReturnedResources().get(f).getId().equals(id)){
+//                return_date = library.getReturnedResources().get(f).getDate();
+//                return_time = library.getReturnedResources().get(f).getTime();
+//                break;
+//            }
+//        }
+//        int returning_time = time_in_minute(return_time);
+//        int borrowing_time = time_in_minute(borrow_time);
+//        int time_difference = time_difference_in_minute(borrow_time, return_time);
+//        int date_difference = date_difference_in_minute(borrow_date, return_date);
+//        if (borrow_time.equals(return_time)) {
+//            day_difference = date_difference / (24 * 60);
+//        } else {
+//            if (returning_time > borrowing_time) {
+//                day_difference = (time_difference + date_difference) / (24 * 60);
+//                hour_difference+=time_difference/60;
+//
+//            } else if (returning_time < borrowing_time) {
+//                day_difference = (date_difference - time_difference) / (24 * 60);
+//                hour_difference-=time_difference/60;
+//            }
+//        }
+//        hour_difference += day_difference * 24;
+//        return hour_difference;
+//    }
+//    private int most_frequent_count(ArrayList<String> list){
+//        int max_count = 1;
+//        for(int i=0; i<list.size(); i++){
+//            int count =1;
+//            for(int j=i+1; j<list.size(); j++){
+//                if(list.get(i).equals(list.get(j))){
+//                    count++;
+//                }
+//                if(max_count < count){
+//                    max_count = count;
+//                }
+//            }
+//        }
+//        return max_count;
+//    }
+//    private String most_frequent_id(ArrayList<String> list){
+//        String most = list.get(0);
+//        int count =0;
+//        for(int i=0; i<list.size(); i++){
+//            int cnt =0;
+//            for(int j=i+1; j<list.size(); j++){
+//                if(list.get(i).equals(list.get(j))){
+//                    cnt++;
+//                }
+//            }
+//            if(count < cnt){
+//                most = list.get(i);
+//                count = cnt;
+//            }
+//        }
+//        return most;
+//    }
+//    public void reportSell(String lib_id){
+//
+//    }
 }

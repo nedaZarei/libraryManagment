@@ -21,9 +21,10 @@ abstract public class GeneralUser {
     public void setPassWord(String passWord) {
         this.passWord = passWord;
     }
-    public void buy(String lib_id, String resource_id){
+    public void buy(String user_id,String lib_id, String resource_id){
         if(this instanceof Manager){
             System.out.println("permission-denied");
+            Logger.createObj("PERMISSION-DENIED",new String[]{"buy",user_id,resource_id,lib_id});
             return;
         }
         boolean is_selling = false;
@@ -48,10 +49,12 @@ abstract public class GeneralUser {
         }
         if(!is_selling){
             System.out.println("not-allowed");
+            Logger.createObj("NOT-ALLOWED",new String[]{"buy",user_id,resource_id,lib_id});
             return;
         }
         else if(bought_count == num){
             System.out.println("not-allowed");
+            Logger.createObj("NOT-ALLOWED",new String[]{"buy",user_id,resource_id,lib_id});
             return;
         }
         for(int i=0; i<Campus.getLibraries().size(); i++){
@@ -69,6 +72,7 @@ abstract public class GeneralUser {
             }
         }
         System.out.println("success");
+        Logger.createObj("SUCCESS",new String[]{"buy",user_id,resource_id,lib_id});
     }
     public void read(String user_id,String lib_id,String resource_id,String date,String time){
         if(!(this instanceof Professor)){

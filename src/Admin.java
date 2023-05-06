@@ -91,6 +91,17 @@ public class Admin extends GeneralUser implements AddLibrary,AddCategory,AddStaf
     }
     @Override
     public void removeUser(String user_id){
+        boolean user_is_found = false;
+        for(int i=0; i<Campus.getUsers().size(); i++){
+            if(Campus.getUsers().get(i).getId().equals(user_id)){
+                user_is_found = true;
+                break;
+            }
+        }
+        if(!user_is_found){
+            System.out.println("not-found");
+            return;
+        }
         boolean user_is_borrowing = false;
         boolean user_has_penalty = false;
         for(int i=0; i<Campus.getLibraries().size(); i++){

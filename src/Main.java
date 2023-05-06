@@ -33,24 +33,27 @@ public class Main {
                     break;
                 case "add-category":
                     boolean upper_category_is_found = false;
-                    if (!parts[5].equals("null")) {
+                    if ( admin_and_checking_other_things(parts) && (!parts[5].equals("null")) ) {
                         for (int i = 0; i < Campus.getCategories().size(); i++) {
                             if (Campus.getCategories().get(i).getCatId().equals(parts[5])) {
                                 upper_category_is_found = true;
                                 break;
                             }
                         }
+                        if (!upper_category_is_found) {
+                            System.out.println("not-found");
+                        }
                     }
-                    if (!upper_category_is_found) {
-                        System.out.println("not-found");
-                    } else if (admin_and_checking_other_things(parts)) {
-                        Category category = new Category(parts[3], parts[4],parts[5]);
-                        for(int i=0; i<Campus.getUsers().size(); i++){
-                            if(Campus.getUsers().get(i).getId().equals(parts[1])){
-                                //we are sure this user is admin (because we checked in checking_other_things method)
-                                Admin admin = (Admin) Campus.getUsers().get(i);
-                                admin.addCategory(category);
-                                break;
+                    if( parts[5].equals("null") || upper_category_is_found ){
+                        if (admin_and_checking_other_things(parts)) {
+                            Category category = new Category(parts[3], parts[4],parts[5]);
+                            for(int i=0; i<Campus.getUsers().size(); i++){
+                                if(Campus.getUsers().get(i).getId().equals(parts[1])){
+                                    //we are sure this user is admin (because we checked in checking_other_things method)
+                                    Admin admin = (Admin) Campus.getUsers().get(i);
+                                    admin.addCategory(category);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -193,7 +196,7 @@ public class Main {
                     }
                     break;
                 case "borrow":
-                    if(!is_unsuccessful(parts,"library_user")){
+                    if(!is_unsuccessful(parts,"library_user","borrow")){
                         for(int i=0; i<Campus.getLibraryUsers().size(); i++){
                             if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
@@ -204,7 +207,7 @@ public class Main {
                     }
                     break;
                 case "return" :
-                    if(!is_unsuccessful(parts,"library_user")){
+                    if(!is_unsuccessful(parts,"library_user","return")){
                         for(int i=0; i<Campus.getLibraryUsers().size(); i++){
                             if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
@@ -215,18 +218,18 @@ public class Main {
                     }
                     break;
                 case "buy" :
-                    if(!is_unsuccessful(parts,"general_user")){
+                    if(!is_unsuccessful(parts,"general_user","buy")){
                         for(int i=0; i<Campus.getUsers().size(); i++){
                             if(Campus.getUsers().get(i).getId().equals(parts[1])){
 
-                                Campus.getUsers().get(i).buy(parts[3],parts[4]);
+                                Campus.getUsers().get(i).buy(parts[1],parts[3],parts[4]);
                                 break;
                             }
                         }
                     }
                     break;
                 case "read" :
-                    if(!is_unsuccessful(parts,"general_user")){
+                    if(!is_unsuccessful(parts,"general_user","read")){
                         for(int i=0; i<Campus.getUsers().size(); i++){
                             if(Campus.getUsers().get(i).getId().equals(parts[1])){
 
@@ -237,7 +240,7 @@ public class Main {
                     }
                     break;
                 case "add-comment" :
-                    if(!is_unsuccessful(parts,"library_user")){
+                    if(!is_unsuccessful(parts,"library_user","add-comment")){
                         for(int i=0;i<Campus.getLibraryUsers().size(); i++){
                             if(Campus.getLibraryUsers().get(i).getId().equals(parts[1])){
 
@@ -315,6 +318,30 @@ public class Main {
                             }
                         }
                     }
+//                case "report-most-popular" :
+//                    if(manager_and_checking_other_things(parts[1],parts[2],"null",parts[3])){
+//                        for(int i=0; i<Campus.getUsers().size(); i++){
+//                            if(Campus.getUsers().get(i).getId().equals(parts[1])){
+//                                //we are sure this user is a manager (because we checked in checking_other_things method)
+//                                Manager manager = (Manager) Campus.getUsers().get(i);
+//                                manager.reportMostPopular(parts[3]);
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    break;
+//                case "report-sell" :
+//                    if(manager_and_checking_other_things(parts[1],parts[2],"null",parts[3])){
+//                        for(int i=0; i<Campus.getUsers().size(); i++){
+//                            if(Campus.getUsers().get(i).getId().equals(parts[1])){
+//                                //we are sure this user is a manager (because we checked in checking_other_things method)
+//                                Manager manager = (Manager) Campus.getUsers().get(i);
+//                                manager.reportSell(parts[3]);
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    break;
             }
         }
         while (true);
@@ -404,7 +431,7 @@ public class Main {
         return true;
     }
 
-    private static boolean is_unsuccessful(String[] parts,String user_type) {
+    private static boolean is_unsuccessful(String[] parts,String user_type,String command) {
         boolean user_is_found = false, lib_is_found = false, resource_is_found = false;
 
        if(user_type.equals("library_user")){
@@ -413,6 +440,7 @@ public class Main {
                    user_is_found = true;
                    if(!Campus.getLibraryUsers().get(i).getPassWord().equals(parts[2])){
                        System.out.println("invalid-pass");
+                       log_invalid_pass(parts,command);
                        return true;
                    }
                    break;
@@ -425,6 +453,7 @@ public class Main {
                    user_is_found = true;
                    if(!Campus.getUsers().get(i).getPassWord().equals(parts[2])){
                        System.out.println("invalid-pass");
+                       log_invalid_pass(parts,command);
                        return true;
                    }
                    break;
@@ -433,6 +462,7 @@ public class Main {
        }
         if(!user_is_found){
             System.out.println("not-found");
+            log_not_found(parts,command);
             return true;
         }
         for (int i = 0; i < Campus.getLibraries().size(); i++) {
@@ -449,9 +479,30 @@ public class Main {
         }
         if ((!lib_is_found) || (!resource_is_found)) {
             System.out.println("not-found");
+            log_not_found(parts,command);
             return true;
         }
         return false;
+    }
+    private static void log_invalid_pass(String[] parts,String command){
+        switch (command) {
+            case "borrow":
+                Logger.createObj("INVALID-PASS", new String[]{"borrow", parts[1], parts[5], parts[6], parts[4],parts[3]});
+                break;
+            case "buy":
+                Logger.createObj("INVALID-PASS", new String[]{"buy",parts[1],parts[4],parts[3]});
+                break;
+        }
+    }
+    private static void log_not_found(String[] parts,String command){
+        switch(command){
+            case "borrow" :
+                Logger.createObj("NOT-FOUND",new String[]{"borrow",parts[1],parts[5],parts[6],parts[4],parts[3]});
+                break;
+            case "buy":
+                Logger.createObj("NOT-FOUND",new String[]{"buy",parts[1],parts[4],parts[3]});
+                break;
+        }
     }
     private static boolean check_conditions(String[] parts){
         boolean user_is_found = false;

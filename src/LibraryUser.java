@@ -24,6 +24,7 @@ abstract public class LibraryUser extends User {
                         else if(Campus.getLibraries().get(i).getResources().get(k) instanceof GanjinehBook
                                  || Campus.getLibraries().get(i).getResources().get(k) instanceof SellingBook){
                             System.out.println("not-allowed");
+                            Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                             return;
                         }
                         break;
@@ -38,6 +39,7 @@ abstract public class LibraryUser extends User {
                         if (Campus.getLibraries().get(i).getBorrowedResources().get(k).getCostumer_id().equals(user_id)) {
                             //this user has already borrowed this resource
                             System.out.println("not-allowed");
+                            Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                             return;
                         }
                         resource_borrowed_count++;
@@ -58,6 +60,7 @@ abstract public class LibraryUser extends User {
                             && Campus.getLibraries().get(i).getReturnedResources().get(k).getPenalty() != 0) {
                         //this user did not return a resource on time
                         System.out.println("not-allowed");
+                        Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                         return;
                     }
                 }
@@ -66,16 +69,19 @@ abstract public class LibraryUser extends User {
         }
         if (number == resource_borrowed_count) {
             System.out.println("not-allowed");
+            Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
             return;
         }
         if (this instanceof Student) {
             if (user_borrowing_count == 3) {
                 System.out.println("not-allowed");
+                Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                 return;
             }
         } else if (this instanceof Staff || this instanceof Professor) {
             if (user_borrowing_count == 5) {
                 System.out.println("not-allowed");
+                Logger.createObj("NOT-ALLOWED",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                 return;
             }
         }
@@ -85,12 +91,14 @@ abstract public class LibraryUser extends User {
                     BorrowedBook borrowedBook = new BorrowedBook(user_id,lib_id,resource_id,date,time);
                     Campus.getLibraries().get(i).getBorrowedResources().add(borrowedBook);
                     System.out.println("success");
+                    Logger.createObj("SUCCESS",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                     return;
                 }
                 else if(is_thesis){
                     BorrowedThesis borrowedThesis = new BorrowedThesis(user_id,lib_id,resource_id,date,time);
                     Campus.getLibraries().get(i).getBorrowedResources().add(borrowedThesis);
                     System.out.println("success");
+                    Logger.createObj("SUCCESS",new String[]{"borrow",user_id,date,time,resource_id,lib_id});
                     return;
                 }
                 break;
